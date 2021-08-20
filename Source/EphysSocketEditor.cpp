@@ -125,6 +125,7 @@ EphysSocketEditor::EphysSocketEditor(GenericProcessor* parentNode, EphysSocket *
     offsetInput->addListener(this);
     addAndMakeVisible(offsetInput);
 
+    
     transposeButton.setBounds(155, 95, 65, 20);
     transposeButton.setClickingTogglesState(true);
     transposeButton.setToggleState(true, false);

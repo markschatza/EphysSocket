@@ -2,6 +2,7 @@
 #define __EPHYSSOCKETH__
 
 #include <DataThreadHeaders.h>
+#include "SocketLSLBrainAmp.h"
 
 const int DEFAULT_PORT = 9001;
 const float DEFAULT_SAMPLE_RATE = 30000.0f;
@@ -12,6 +13,15 @@ const int DEFAULT_NUM_CHANNELS = 64;
 
 namespace EphysSocketNode
 {
+
+    // Communication Protocol
+    enum Param
+    {
+        BONSAI,
+        LSL,
+        RDA,
+    };
+
     class EphysSocket : public DataThread, public Timer
     {
 
@@ -25,6 +35,7 @@ namespace EphysSocketNode
         int getNumTTLOutputs(int subprocessor) const override;
         float getSampleRate(int subprocessor) const override;
         float getBitVolts(const DataChannel* chan) const override;
+        bool usesCustomNames(); 
         int getNumChannels() const;
 
         // User defined
@@ -52,9 +63,14 @@ namespace EphysSocketNode
         bool stopAcquisition()  override;
         void timerCallback() override;
 
+        void setComProtocol(int protocolIndex);
+        int cur_protocol;
+
         bool connected = false;
 
        ScopedPointer<DatagramSocket> socket;
+       ScopedPointer<LSLinlet> inlet;
+
 
         uint16_t *recvbuf;
         float *convbuf;
