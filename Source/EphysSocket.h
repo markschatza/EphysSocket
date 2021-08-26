@@ -47,7 +47,7 @@ namespace EphysSocketNode
         int num_samp;
         int num_channels;
 
-        int total_samples;
+        int64 total_samples;
         float relative_sample_rate;
 
         void resizeChanSamp();

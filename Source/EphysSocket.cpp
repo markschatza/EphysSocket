@@ -141,7 +141,7 @@ float EphysSocket::getSampleRate(int subproc) const
 
 float EphysSocket::getBitVolts (const DataChannel* ch) const
 {
-    return 0.195f;
+    return data_scale;
 }
 
 
@@ -289,20 +289,20 @@ bool EphysSocket::updateBuffer()
             }
         }
         for (int i = 0; i < num_samp; i++) {
-            //timestamps.set(i, ts_buf[i]);
-            //std::cout << ts_buf[i] << std::endl;
+            timestamps.set(i, ts_buf[i]);
+            std::cout << ts_buf[i] << std::endl;
         }
 
         //timestamps.set(0, ts_buf[0]);
 
         int sampswrit = sourceBuffers[0]->addToBuffer(convbuf,
-            &timestamps.getReference(0),
-            &ttlEventWords.getReference(0),
+            timestamps.getRawDataPointer(),
+            ttlEventWords.getRawDataPointer(),
             num_samp,
             1);
 
         //std::cout << "sampswrite: " << sampswrit << std::endl;
-        //total_samples += num_samp; // if needed
+        total_samples += num_samp; // if needed
     }
         break;
        
@@ -318,9 +318,9 @@ void EphysSocket::timerCallback()
     
     //std::cout << "Expected samples: " << int(sample_rate * 5) << ", Actual samples: " << total_samples << std::endl;
     
-    relative_sample_rate = (sample_rate * 5) / float(total_samples);
+    //relative_sample_rate = (sample_rate * 5) / float(total_samples);
 
-    total_samples = 0;
+    //total_samples = 0;
 }
 
 bool EphysSocket::usesCustomNames()
